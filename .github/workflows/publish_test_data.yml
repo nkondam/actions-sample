@@ -36,4 +36,4 @@ jobs:
 
       - name: Read Excel sheet and perform POST request
         run: |
-          python3 ./.github/scripts/test_data.py
+          python3 ./.github/scripts/publish_test_data.py
