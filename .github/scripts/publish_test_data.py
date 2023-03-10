@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Read Excel sheet into a pandas dataframe
-df = pd.read_excel('data.xlsx')
+df = pd.read_excel('./variables/data.xlsx')
 
 # Convert dataframe to a list of dictionaries
 records = df.to_dict('records')
