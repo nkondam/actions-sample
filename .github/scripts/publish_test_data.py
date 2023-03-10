@@ -4,6 +4,9 @@ import json
 # Read Excel sheet into a pandas dataframe
 df = pd.read_excel('./variables/data.xlsx')
 
+# Convert timestamps to strings
+df['date_column'] = df['date_column'].astype(str)
+
 # Convert dataframe to a list of dictionaries
 records = df.to_dict('records')
 
