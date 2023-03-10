@@ -14,8 +14,7 @@ on:
         type: choice
         description: Select datacenter
         options:
-          - lx
-          - vw
+          - AWS
 
 jobs:
   post-request:
@@ -32,7 +31,7 @@ jobs:
 
       - name: Install required packages
         run: |
-          pip install pandas requests
+          pip install pandas requests openpyxl
 
       - name: Read Excel sheet and perform POST request
         run: |
