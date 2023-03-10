@@ -1,0 +1,30 @@
+name: Perform POST Request
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  post-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Python and dependencies
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Install required packages
+        run: |
+          pip install pandas requests
+
+      - name: Read Excel sheet and perform POST request
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+        run: |
+          python3 ../scripts/test_data.py
