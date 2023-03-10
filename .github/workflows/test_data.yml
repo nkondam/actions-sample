@@ -1,9 +1,21 @@
-name: Perform POST Request
+name: Publish Test Data
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      name:
+        type: choice
+        description: Select environment
+        options:
+          - dev
+          - test
+          - qa
+      datacenter:
+        type: choice
+        description: Select datacenter
+        options:
+          - lx
+          - vw
 
 jobs:
   post-request:
@@ -23,8 +35,5 @@ jobs:
           pip install pandas requests
 
       - name: Read Excel sheet and perform POST request
-        env:
-          API_URL: ${{ secrets.API_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
         run: |
-          python3 ../scripts/test_data.py
+          python3 ../.github/scripts/test_data.py

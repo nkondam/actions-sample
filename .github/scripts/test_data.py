@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-excel_data = pd.read_excel('input.xlsx')
+excel_data = pd.read_excel('../variables/input.xlsx')
 
 # Convert Excel data to JSON
 json_data = excel_data.to_json(orient='records')
