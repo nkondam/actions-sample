@@ -1,0 +1,21 @@
+name: main
+
+permissions:
+  issues: write
+  actions: write
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish test data workflow dispatch
+        uses: aurelien-baudet/workflow-dispatch@v2
+        with:
+          workflow: publist_test_data.yml
+          wait-for-completion: true
+      
+      
