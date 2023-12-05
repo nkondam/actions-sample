@@ -26,5 +26,16 @@ jobs:
                 datacenter: "AWS"
               },
             })
+
+        - name: Get workflow ID's
+          uses: actions/github-script@v7
+          with:
+            script: |
+              github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: "publish_test_data.yml",
+              })
+
       
       
