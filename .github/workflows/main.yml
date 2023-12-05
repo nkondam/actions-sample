@@ -16,7 +16,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.actions.createWorkflowDispatch({
+            const response = await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: "publish_test_data.yml",
@@ -27,14 +27,40 @@ jobs:
               },
             })
 
+            console.log(response)
+
       - name: Get workflow ID's
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.actions.listWorkflowRuns({
+            const runs = github.rest.actions.listWorkflowRuns({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 workflow_id: "publish_test_data.yml",
             })  
+
+            const workflowRuns = await github.paginate(runs)
+            console.log(workflowRuns)
+            const runIds = workflowRuns.data.workflow_runs.map(
+              (workflowRun) => workflowRun.id,
+            )
+
+            const response = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run-id: runIds,
+              filter: "latest",
+            })
+
+            const jobs = response.data.jobs.map((job) => ({
+              id: job.id,
+              steps: job.steps?.map((step) => step.name) || [],
+            }))
+            const steps = Array.from(new Set(jobs.flatMap((job) => job.steps)))
+            console.log(response)
+            console.log(jobs)
+            console.log(steps)
+
+
       
       
