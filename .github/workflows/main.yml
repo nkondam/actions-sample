@@ -15,6 +15,7 @@ jobs:
       - name: Publish test data workflow dispatch
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
             const response = await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
@@ -32,6 +33,7 @@ jobs:
       - name: Get workflow ID's
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
             const runs = github.rest.actions.listWorkflowRuns({
                 owner: context.repo.owner,
