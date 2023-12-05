@@ -14,11 +14,9 @@ jobs:
     steps:
       - name: Publish test data workflow dispatch
         uses: aurelien-baudet/workflow-dispatch@v2
-        env:
-          GITHUB-TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           workflow: publist_test_data.yml
-          token: env.GITHUB_TOKEN
+          token: ${{ secrets.PAT_TOKEN }}
           wait-for-completion: true
       
       
