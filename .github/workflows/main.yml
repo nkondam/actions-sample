@@ -9,7 +9,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  - name: Checkout Repository
+  trigger-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Dispatch and Wait Workflow
@@ -33,7 +36,3 @@ jobs:
 
             // Step 4: Wait for the new job status to be completed
             await dispatchAndWait.waitForCompletion(github, context, newRunIds[0]);
-
-
-      
-      
