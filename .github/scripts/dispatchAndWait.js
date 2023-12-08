@@ -22,6 +22,7 @@ async function listWorkflowRuns(github, context) {
         owner: context.repo.owner,
         repo: context.repo.repo,
         workflow_id: 'publish_test_data.yml', // Replace with the actual workflow ID
+        ref: 'main',
         inputs: {
           name: "dev",
           datacenter: "AWS"
