@@ -21,8 +21,8 @@ async function listWorkflowRuns(github, context) {
       const response = await github.rest.actions.createWorkflowDispatch({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        workflow_id: 'publish_test_data.yml', // Replace with the actual workflow ID
-        ref: 'main',
+        workflow_id: "publish_test_data.yml", // Replace with the actual workflow ID
+        ref: "main",
         inputs: {
           name: "dev",
           datacenter: "AWS"
@@ -33,7 +33,7 @@ async function listWorkflowRuns(github, context) {
         throw new Error(`Failed to dispatch workflow. Status: ${response.status}`);
       }
   
-      return response.data.workflow.id; // Return the workflow ID for later use
+      return response.data; // Return the workflow ID for later use
     } catch (error) {
       throw new Error(`Error dispatching workflow: ${error.message}`);
     }
