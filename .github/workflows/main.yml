@@ -9,59 +9,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  trigger-workflow:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish test data workflow dispatch
+  - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Dispatch and Wait Workflow
+        id: dispatch-and-wait
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
-            const response = await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: "publish_test_data.yml",
-              ref: "main",
-              inputs: {
-                name: "dev",
-                datacenter: "AWS"
-              },
-            })
+            const dispatchAndWait = require('./dispatchAndWait.js');
 
-            console.log(response)
+            // Step 1: List workflow runs and save run IDs
+            const initialRunIds = await dispatchAndWait.listWorkflowRuns(github, context);
+            console.log(`Initial Run IDs: ${initialRunIds}`);
 
-      - name: Get workflow ID's
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.PAT_TOKEN }}
-          script: |
-            const runs = github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: "publish_test_data.yml",
-            })  
+            // Step 2: Create workflow dispatch and get the workflow ID
+            const workflowId = await dispatchAndWait.createWorkflowDispatch(github, context);
+            console.log(`Dispatched workflow with ID: ${workflowId}`);
 
-            const workflowRuns = await github.paginate(runs)
-            console.log(workflowRuns)
-            const runIds = workflowRuns.data.workflow_runs.map(
-              (workflowRun) => workflowRun.id,
-            )
+            // Step 3: Wait for a new job to be created
+            const newRunIds = await dispatchAndWait.waitAndCheckNewJob(github, context, initialRunIds);
+            console.log(`New Run IDs: ${newRunIds}`);
 
-            const response = await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run-id: runIds,
-              filter: "latest",
-            })
-
-            const jobs = response.data.jobs.map((job) => ({
-              id: job.id,
-              steps: job.steps?.map((step) => step.name) || [],
-            }))
-            const steps = Array.from(new Set(jobs.flatMap((job) => job.steps)))
-            console.log(response)
-            console.log(jobs)
-            console.log(steps)
+            // Step 4: Wait for the new job status to be completed
+            await dispatchAndWait.waitForCompletion(github, context, newRunIds[0]);
 
 
       
