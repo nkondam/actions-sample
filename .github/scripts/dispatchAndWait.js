@@ -7,6 +7,8 @@ async function listWorkflowRuns(github, context) {
         repo: context.repo.repo,
         workflow_id: 'publish_test_data.yml', // Replace with the actual workflow ID
       });
+
+      console.log(`list workflow runs: ${JSON.stringify(response)}`);
   
       return response.data.workflow_runs.map(run => run.id);
     } catch (error) {
