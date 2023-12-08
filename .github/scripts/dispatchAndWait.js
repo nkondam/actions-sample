@@ -2,7 +2,7 @@
 
 async function listWorkflowRuns(github, context) {
     try {
-      const response = await github.actions.listWorkflowRuns({
+      const response = await github.rest.actions.listWorkflowRuns({
         owner: context.repo.owner,
         repo: context.repo.repo,
         workflow_id: 'publish_test_data.yml', // Replace with the actual workflow ID
@@ -18,7 +18,7 @@ async function listWorkflowRuns(github, context) {
   
   async function createWorkflowDispatch(github, context) {
     try {
-      const response = await github.actions.createWorkflowDispatch({
+      const response = await github.rest.actions.createWorkflowDispatch({
         owner: context.repo.owner,
         repo: context.repo.repo,
         workflow_id: 'publish_test_data.yml', // Replace with the actual workflow ID
@@ -63,7 +63,7 @@ async function listWorkflowRuns(github, context) {
       let status = "";
   
       while (status !== "completed") {
-        const run = await github.actions.getWorkflowRun({
+        const run = await github.rest.actions.getWorkflowRun({
           owner: context.repo.owner,
           repo: context.repo.repo,
           run_id: runId,
